@@ -1,21 +1,21 @@
-## Citibike Machine Learning Hands-on-Lab with Snowpark Python  
+## Citibike Machine Learning Orchestration with Astronomer and Snowpark Python  
 
 ### Requirements:  
--Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html)  
--Activate your Snowflake account for [Snowpark Private Preview access](https://docs.google.com/forms/d/e/1FAIpQLSf0-ns-PQxjYJLCeSDybZyZeGtcab7NNNdU27IssZdRTEJ3Tg/viewform)  
--Complete the Snowflake SE [Python Training](https://snowflake.udemy.com/learning-paths/2001710/) and/or the Test-Out Option at the bottom.  
-  
-  
-!!! NOTE if you have an existing conda environment named `snowpark_030` it will be over-written.
-  
-
-### Setup Steps:
-```bash
-git clone https://github.com/sfc-gh-mgregory/citibike-ml-tko-HOL
-cd citibike-ml-tko-HOL
-conda env create -f ./conda-env.yml  --force
-conda activate snowpark_030
-jupyter notebook
+- You need a version of Docker running locally.
+- Install the [Astro CLI](https://github.com/astronomer/astro-cli)
+- Clone this repository to your local machine and `cd` into that folder. 
+- Add a `creds.json` file under the `include/` folder with the following details. You can copy and modify the `creds.template.json` file that is part of this repo.
 ```
-  
-In Jupyter file browser open `creds.json` and update with your Snowflake account credentials.
+{
+    "username": "<username>",
+    "password": "<password>",
+    "warehouse": "<warehouse_name>",
+    "account": "<account_name",
+    "role": "<role_name>",
+    "database":"<DATABASE_NAME>",
+    "schema":"<SCHEMA_NAME>"
+}
+```
+- From the repo folder, run:  
+`astro dev start`  
+- This will launch the astro managed airflow instance which you can browse to on [http://localhost:8080/](http://localhost:8080/) and a Jupyter Notebook instance which you browse to on [http://localhost:8888/](http://localhost:8888/)

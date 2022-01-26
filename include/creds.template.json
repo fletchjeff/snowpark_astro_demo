@@ -1,0 +1,9 @@
+{
+    "username": "<username>",
+    "password": "<password>",
+    "warehouse": "<warehouse_name>",
+    "account": "<account_name",
+    "role": "<role_name>",
+    "database":"<DATABASE_NAME>",
+    "schema":"<SCHEMA_NAME>"
+}
