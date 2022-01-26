@@ -1,0 +1,7 @@
+creds.json
+penv/*
+_temp/*
+.ipynb_checkpoints/
+__pycache__/
+include/creds.json
+k8s_yaml_files

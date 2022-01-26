@@ -1,0 +1,4 @@
+jupyter
+pytorch-tabnet
+matplotlib
+seaborn

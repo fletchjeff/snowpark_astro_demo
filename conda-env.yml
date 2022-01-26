@@ -1,0 +1,12 @@
+name: snowpark_030
+channels:
+  - https://repo.anaconda.com/pkgs/snowflake
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - './dependencies/snowflake_snowpark_python-0.3.0-py3-none-any.whl[pandas]'
+    - jupyter
+    - pytorch-tabnet
+    - matplotlib
+    - seaborn
