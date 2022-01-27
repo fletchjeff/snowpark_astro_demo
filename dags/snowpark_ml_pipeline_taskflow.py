@@ -99,7 +99,7 @@ def snowpark_citibike_ml_taskflow():
     #     return bob + " More"
     
     @task()
-    def incremental_elt_task(table_name_dict: dict):
+    def  incremental_elt_task(table_name_dict: dict):
         session = snowpark_connect()
         file_name_end2 = '202102-citibike-tripdata.csv.zip'
         file_name_end1 = '201402-citibike-tripdata.zip'
@@ -148,7 +148,8 @@ def snowpark_citibike_ml_taskflow():
         feature_view_names = generate_feature_views(session=session, 
                                             clone_table_name=table_name_dict["clone_table_name"], 
                                             feature_view_name=table_name_dict["feature_view_name"], 
-                                            holiday_table_name=holiday_and_precip_table_names["holiday_table_name"], 
+                                            holiday_table_name=holiday_and_precip_table_names["holiday_table_name"],
+                                            #precip_table_name=holiday_and_precip_table_names["holiday_table_name"],
                                             precip_table_name=holiday_and_precip_table_names["precip_table_name"],
                                             target_column='COUNT', 
                                             top_n=top_n,
@@ -159,18 +160,18 @@ def snowpark_citibike_ml_taskflow():
     @task()
     def get_pred_table_name(model_udf_name, feature_view_names, setup_database_names): 
         session = snowpark_connect()
-        # same_pred_table_name = train_predict_feature_views(session=session, 
-        #                                       station_train_pred_udf_name=model_udf_name, 
-        #                                       feature_view_names=feature_view_names, 
-        #                                       pred_table_name=setup_database_names["pred_table_name"])
+        same_pred_table_name = train_predict_feature_views(session=session, 
+                                              station_train_pred_udf_name=model_udf_name, 
+                                              feature_view_names=feature_view_names, 
+                                              pred_table_name=setup_database_names["pred_table_name"])
         session.close()
-        return {
-            "model_udf_name":model_udf_name,
-            "feature_view_names":feature_view_names,
-            "setup_database_names":setup_database_names
-            }
+        # return {
+        #     "model_udf_name":model_udf_name,
+        #     "feature_view_names":feature_view_names,
+        #     "setup_database_names":setup_database_names
+        #     }
 
-        #return same_pred_table_name
+        return same_pred_table_name
 
     @task()
     def get_eval_model_udf_name(setup_database_names):
@@ -185,14 +186,19 @@ def snowpark_citibike_ml_taskflow():
         return eval_model_udf_name
 
     @task()
-    def get_eval_table_name(pred_table_name, eval_model_udf_name, eval_table_name):
+    def get_eval_table_name(pred_table_name, eval_model_udf_name, setup_database_names):
         session = snowpark_connect()
         same_eval_table_name = evaluate_station_predictions(session=session, 
-                                               pred_table_name=pred_table_name, 
-                                               eval_model_udf_name=eval_model_udf_name, 
-                                               eval_table_name=eval_table_name)
+                                               pred_table_name=str(pred_table_name), 
+                                               eval_model_udf_name=str(eval_model_udf_name), 
+                                               eval_table_name=str(setup_database_names["eval_table_name"]))
         session.close()
         return same_eval_table_name                                               
+        # return {
+        #     "pred_table_name":pred_table_name,
+        #     "eval_model_udf_name":eval_model_udf_name,
+        #     "setup_database_names":setup_database_names
+        # }
     
     #Task order
     #setup_database_names = dict(snowpark_database_setup())
@@ -207,7 +213,7 @@ def snowpark_citibike_ml_taskflow():
     feature_view_names = get_feature_view_names(setup_database_names,holiday_and_precip_table_names,top_n)
     pred_table_name = get_pred_table_name(model_udf_name,feature_view_names,setup_database_names)
     eval_model_udf_name = get_eval_model_udf_name(setup_database_names)
-    eval_table_name = get_eval_table_name(pred_table_name,eval_model_udf_name,setup_database_names['eval_table_name'])
+    eval_table_name = get_eval_table_name(pred_table_name,eval_model_udf_name,setup_database_names)
     return eval_table_name
     # bob = snowpark_database_setup()
     # hello_bob = something_with_bob(bob)
