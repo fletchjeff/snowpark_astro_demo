@@ -4,4 +4,5 @@ _temp/*
 .ipynb_checkpoints/
 __pycache__/
 include/creds.json
+include/snowflake_snowpark_python-0.3.0-py3-none-any.whl
 k8s_yaml_files
