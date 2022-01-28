@@ -4,6 +4,7 @@ def generate_holiday_df(session, start_date, end_date):
     from pandas.tseries.holiday import USFederalHolidayCalendar
     import pandas as pd
 
+
     cal = USFederalHolidayCalendar()
     holiday_list = pd.DataFrame(cal.holidays(start=start_date, end=end_date), columns=['DATE'], dtype=str)
     holiday_df = session.createDataFrame(holiday_list) \
